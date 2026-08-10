@@ -33,9 +33,10 @@ export default function App() {
   const [score,                setScore]                = useState(0)
   const [selectedAnswer,       setSelectedAnswer]       = useState(null)
   const [isQuizComplete,       setIsQuizComplete]       = useState(false)
+  const [userAnswers,          setUserAnswers]          = useState([]) // Array of { question, selectedAnswer, isCorrect }
 
   // Configure how many questions per test run
-  const questionsPerSession = 15
+  const questionsPerSession = 40
 
   /** Handles the setup from the Welcome screen */
   const handleStartExam = useCallback(({ name, grade, subject }) => {
@@ -46,7 +47,7 @@ export default function App() {
     // 2. Shuffle the matching questions
     const shuffledList = shuffleArray(rawList)
 
-    // 3. Slice a subset so it's not too long for students (e.g. 15 questions max)
+    // 3. Slice a subset so it's not too long for students (up to 40)
     const sessionList = shuffledList.slice(0, Math.min(questionsPerSession, shuffledList.length))
 
     setStudentInfo({ name, grade, subject })
@@ -55,6 +56,7 @@ export default function App() {
     setScore(0)
     setSelectedAnswer(null)
     setIsQuizComplete(false)
+    setUserAnswers([])
   }, [])
 
   const totalQuestions  = quizQuestions.length
@@ -64,13 +66,25 @@ export default function App() {
   /** Called when the student taps an answer option */
   const handleSelectAnswer = useCallback((optionIndex) => {
     setSelectedAnswer(optionIndex)
-    if (optionIndex === currentQuestion.correctAnswer) {
-      setScore(prev => prev + 1)
-    }
-  }, [currentQuestion])
+  }, [])
 
   /** Move to next question or finalise exam */
   const handleNext = useCallback(() => {
+    const isCorrect = selectedAnswer === currentQuestion.correctAnswer
+    
+    // Save current question's result
+    const newAnswer = {
+      question: currentQuestion,
+      selectedAnswer: selectedAnswer,
+      isCorrect: isCorrect
+    }
+    
+    setUserAnswers(prev => [...prev, newAnswer])
+    
+    if (isCorrect) {
+      setScore(prev => prev + 1)
+    }
+
     const next = currentQuestionIndex + 1
     if (next >= totalQuestions) {
       setIsQuizComplete(true)
@@ -78,7 +92,7 @@ export default function App() {
       setCurrentQuestionIndex(next)
       setSelectedAnswer(null)
     }
-  }, [currentQuestionIndex, totalQuestions])
+  }, [currentQuestionIndex, totalQuestions, selectedAnswer, currentQuestion])
 
   /** Reset student state to selection screen */
   const handleRestart = useCallback(() => {
@@ -88,7 +102,9 @@ export default function App() {
     setScore(0)
     setSelectedAnswer(null)
     setIsQuizComplete(false)
+    setUserAnswers([])
   }, [])
+
 
   return (
     <div
@@ -209,9 +225,11 @@ export default function App() {
                 <ResultsScreen
                   score={score}
                   totalQuestions={totalQuestions}
+                  userAnswers={userAnswers}
                   onRestart={handleRestart}
                 />
               </motion.div>
+
             ) : (
               <motion.div key={currentQuestionIndex}>
                 {/* ── Question card ── */}
