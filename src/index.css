@@ -1,0 +1,220 @@
+@import "tailwindcss";
+
+/* ── Custom CSS tokens & global resets ─────────────────────────────────────── */
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* Brand palette */
+  --color-bg-deep:    #0d1117;
+  --color-bg-surface: #161b22;
+  --color-bg-card:    #1c2333;
+  --color-border:     #30363d;
+
+  --color-primary:    #6e8efb;
+  --color-primary-h:  #a777e3;
+  --color-accent:     #a777e3;
+
+  --color-correct:    #2ea043;
+  --color-correct-bg: rgba(46, 160, 67, 0.15);
+  --color-wrong:      #f85149;
+  --color-wrong-bg:   rgba(248, 81, 73, 0.15);
+
+  --color-text-1: #e6edf3;
+  --color-text-2: #8b949e;
+  --color-text-3: #6e7681;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg-deep);
+  color: var(--color-text-1);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+
+/* ── Animated gradient background ──────────────────────────────────────────── */
+.bg-animated {
+  background: linear-gradient(
+    135deg,
+    #0d1117 0%,
+    #161033 35%,
+    #0d1117 65%,
+    #001233 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+}
+@keyframes gradientShift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+/* ── Glass card ─────────────────────────────────────────────────────────────── */
+.card-glass {
+  background: rgba(28, 35, 51, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.3),
+    0 20px 60px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+/* ── Subject badge ──────────────────────────────────────────────────────────── */
+.badge-math    { background: rgba(110,142,251,0.18); color: #6e8efb; border: 1px solid rgba(110,142,251,0.3); }
+.badge-science { background: rgba(63,185,80,0.18);  color: #3fb950; border: 1px solid rgba(63,185,80,0.3);  }
+.badge-history { background: rgba(210,153,34,0.18); color: #e3b341; border: 1px solid rgba(210,153,34,0.3); }
+
+/* ── Progress bar ───────────────────────────────────────────────────────────── */
+.progress-track {
+  background: var(--color-bg-card);
+  border-radius: 99px;
+  height: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 12px rgba(110,142,251,0.5);
+}
+
+/* ── Answer option button ───────────────────────────────────────────────────── */
+.option-btn {
+  width: 100%;
+  text-align: left;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  border: 1.5px solid var(--color-border);
+  background: rgba(22, 27, 34, 0.6);
+  color: var(--color-text-1);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.option-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(110,142,251,0.08) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.option-btn:hover:not(:disabled)::before  { opacity: 1; }
+.option-btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  transform: translateX(4px);
+  box-shadow: 0 0 0 1px rgba(110,142,251,0.3), -4px 0 0 0 var(--color-primary);
+}
+
+.option-btn.correct {
+  border-color: var(--color-correct);
+  background: var(--color-correct-bg);
+  box-shadow: 0 0 0 1px rgba(46,160,67,0.4), 0 0 20px rgba(46,160,67,0.15);
+}
+.option-btn.wrong {
+  border-color: var(--color-wrong);
+  background: var(--color-wrong-bg);
+  box-shadow: 0 0 0 1px rgba(248,81,73,0.4), 0 0 20px rgba(248,81,73,0.15);
+}
+.option-btn:disabled { cursor: not-allowed; }
+
+/* ── Label index pill ───────────────────────────────────────────────────────── */
+.option-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(110,142,251,0.12);
+  color: var(--color-primary);
+  border: 1px solid rgba(110,142,251,0.2);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.option-btn.correct .option-index { background: rgba(46,160,67,0.2);  color: #3fb950; border-color: rgba(46,160,67,0.4);  }
+.option-btn.wrong   .option-index { background: rgba(248,81,73,0.2); color: #f85149; border-color: rgba(248,81,73,0.4); }
+
+/* ── Next / CTA button ──────────────────────────────────────────────────────── */
+.btn-primary {
+  padding: 0.85rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  color: #fff;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(110,142,251,0.35);
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0);
+  transition: background 0.2s ease;
+}
+.btn-primary:hover:not(:disabled)::after { background: rgba(255,255,255,0.08); }
+.btn-primary:active:not(:disabled) { transform: scale(0.97); }
+.btn-primary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ── Score ring ─────────────────────────────────────────────────────────────── */
+.score-ring-track { fill: none; stroke: var(--color-bg-card); stroke-width: 10; }
+.score-ring-fill  {
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke: url(#scoreGradient);
+  transform-origin: center;
+  transform: rotate(-90deg);
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Confetti canvas ────────────────────────────────────────────────────────── */
+.confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+/* ── Responsive helpers ─────────────────────────────────────────────────────── */
+.quiz-wrapper {
+  width: 100%;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+@media (min-width: 640px)  { .quiz-wrapper { padding: 2rem 1.5rem; } }
+@media (min-width: 1024px) { .quiz-wrapper { padding: 3rem 2rem; } }
