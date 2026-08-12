@@ -1,44 +1,16 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getQuestions } from './data/questions'
+import { generateSessionQuestions } from './data/questionGenerator'
 import QuizCard from './components/QuizCard'
 import ResultsScreen from './components/ResultsScreen'
 import WelcomeScreen from './components/WelcomeScreen'
-
-/** Shuffles an array in-place using Fisher-Yates — returns new array */
-function shuffleArray(array) {
-  const arr = [...array]
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]]
-  }
-  return arr
-}
+import { saveExamResult } from './services/firebase'
 
 /**
- * Builds the question list for a session.
- *   - Single subject  → shuffle all 40, take up to 40
- *   - 'All' subjects  → 30 Math + 30 Science + 10 History = 70, interleaved
+ * Builds a unique, dynamic question list for each exam session.
  */
 function buildSession(grade, subject) {
-  if (subject !== 'All') {
-    return shuffleArray(getQuestions(grade, subject)).slice(0, 40)
-  }
-
-  // Weighted mix for 'All': 30 Math + 30 Science + 10 History
-  const math    = shuffleArray(getQuestions(grade, 'Math')).slice(0, 30)
-  const science = shuffleArray(getQuestions(grade, 'Science')).slice(0, 30)
-  const history = shuffleArray(getQuestions(grade, 'History')).slice(0, 10)
-
-  // Interleave so questions feel varied (not all Math at the start)
-  const combined = []
-  const maxLen = Math.max(math.length, science.length, history.length)
-  for (let i = 0; i < maxLen; i++) {
-    if (math[i])    combined.push(math[i])
-    if (science[i]) combined.push(science[i])
-    if (history[i]) combined.push(history[i])
-  }
-  return combined
+  return generateSessionQuestions(grade, subject)
 }
 
 /** Formats seconds as MM:SS */
@@ -57,6 +29,8 @@ export default function App() {
   const [isQuizComplete,       setIsQuizComplete]       = useState(false)
   const [userAnswers,          setUserAnswers]          = useState([])
   const [timeLeft,             setTimeLeft]             = useState(0)  // seconds
+  const [dbSyncStatus,         setDbSyncStatus]         = useState(null) // null, 'saving', 'saved', 'error'
+  const [dbError,              setDbError]              = useState(null)
 
   // Use a ref to hold the finishQuiz handler so the interval can call it
   // without stale closure issues
@@ -106,6 +80,28 @@ export default function App() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft])
+
+  // Automatically save exam results when the exam is complete
+  useEffect(() => {
+    if (isQuizComplete && studentInfo && quizQuestions.length > 0) {
+      setDbSyncStatus('saving')
+      saveExamResult(studentInfo, score, quizQuestions.length, userAnswers)
+        .then((res) => {
+          if (res.success) {
+            setDbSyncStatus('saved')
+          } else {
+            setDbSyncStatus('error')
+            setDbError(res.error || 'Unknown error')
+          }
+        })
+        .catch((err) => {
+          console.error('Error saving exam results:', err)
+          setDbSyncStatus('error')
+          setDbError(err.message || 'Network error')
+        })
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isQuizComplete, studentInfo])
 
   /** Handles the setup from the Welcome screen */
   const handleStartExam = useCallback(({ name, grade, subject, timerMinutes }) => {
@@ -170,6 +166,8 @@ export default function App() {
     setIsQuizComplete(false)
     setUserAnswers([])
     setTimeLeft(0)
+    setDbSyncStatus(null)
+    setDbError(null)
   }, [])
 
   return (
@@ -209,10 +207,10 @@ export default function App() {
 
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--color-text-3)', letterSpacing: '0.08em', textTransform: 'uppercase', lineHeight: 1.2 }}>
-              SummerLMS Portal
+              OmisoreTestLab
             </p>
             <h1 style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--color-text-1)', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {studentInfo ? `${studentInfo.name}'s Exam` : 'Interactive K-12 Examination'}
+              {studentInfo ? `${studentInfo.name}'s Exam` : 'A Private Testing Platform'}
             </h1>
           </div>
 
@@ -331,6 +329,8 @@ export default function App() {
                   totalQuestions={totalQuestions}
                   userAnswers={userAnswers}
                   onRestart={handleRestart}
+                  dbSyncStatus={dbSyncStatus}
+                  dbError={dbError}
                 />
               </motion.div>
 
@@ -376,7 +376,7 @@ export default function App() {
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
       <footer style={{ textAlign: 'center', padding: '1.5rem', borderTop: '1px solid var(--color-border)' }}>
         <p style={{ fontSize: '0.75rem', color: 'var(--color-text-3)' }}>
-          SummerLMS • Bakersfield Grade 3 &amp; 5 Assessment System • {new Date().getFullYear()}
+          OmisoreTestLab • A Private Testing Platform • {new Date().getFullYear()}
         </p>
       </footer>
     </div>

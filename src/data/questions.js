@@ -1969,13 +1969,666 @@ const grade5History = [
 // ─── Exports ──────────────────────────────────────────────────────────────────
 
 /** Complete flat list of all 240 curriculum-aligned questions */
+
+// ─── 3RD GRADE — SCENARIO-BASED & APPLICATION (40 questions) ────────────────────
+const grade3Scenario = [
+  {
+    id: 241,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A bakery baked 24 cupcakes in the morning. They sold 3/4 of the cupcakes by noon. How many cupcakes were sold?",
+    options: ["12 cupcakes", "16 cupcakes", "18 cupcakes", "20 cupcakes"],
+    correctAnswer: 2
+  },
+  {
+    id: 242,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] Leo has a rectangular garden measuring 6 meters long and 4 meters wide. What is the total perimeter around his garden?",
+    options: ["10 meters", "20 meters", "24 meters", "28 meters"],
+    correctAnswer: 1
+  },
+  {
+    id: 243,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] Sophia cut a pizza into 8 equal slices. She ate 2 slices and her brother ate 3 slices. What fraction of the pizza is remaining?",
+    options: ["3/8", "5/8", "2/8", "1/2"],
+    correctAnswer: 0
+  },
+  {
+    id: 244,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] In a classroom, desks are arranged in 5 rows with 6 desks in each row. If 4 desks are empty, how many students are sitting at desks?",
+    options: ["26 students", "30 students", "24 students", "22 students"],
+    correctAnswer: 0
+  },
+  {
+    id: 245,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] Ethan buys a toy for $7 and a book for $5. He pays with a $20 bill. How much change should Ethan receive?",
+    options: ["$6", "$8", "$10", "$12"],
+    correctAnswer: 1
+  },
+  {
+    id: 246,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A ribbon is 1/2 meter long. Alex connects 3 identical ribbons end-to-end. What is the total length of the ribbons?",
+    options: ["1 meter", "1 1/2 meters", "2 meters", "2 1/2 meters"],
+    correctAnswer: 1
+  },
+  {
+    id: 247,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] Farmer Brown has 32 apples. He packages them equally into 4 boxes. How many apples are in each box?",
+    options: ["6 apples", "7 apples", "8 apples", "9 apples"],
+    correctAnswer: 2
+  },
+  {
+    id: 248,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] In the algebraic equation x + 8 = 15, x represents the number of library books returned today. How many books were returned?",
+    options: ["6 books", "7 books", "8 books", "9 books"],
+    correctAnswer: 1
+  },
+  {
+    id: 249,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A water pitcher contains 2/3 liter of juice. After Sam drinks 1/3 liter, how much juice is left in the pitcher?",
+    options: ["1/3 liter", "2/3 liter", "1 liter", "0 liters"],
+    correctAnswer: 0
+  },
+  {
+    id: 250,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A rectangular bedroom rug is 3 feet wide and 5 feet long. What is the area of the rug in square feet?",
+    options: ["8 sq ft", "12 sq ft", "15 sq ft", "16 sq ft"],
+    correctAnswer: 2
+  },
+  {
+    id: 251,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] Chloe earned $4 per hour for 4 hours of pet sitting. She then spent $6 on a craft kit. How much money does Chloe have left?",
+    options: ["$8", "$10", "$12", "$14"],
+    correctAnswer: 1
+  },
+  {
+    id: 252,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] An analog clock shows the minute hand pointing straight at the 6 and the hour hand halfway between 3 and 4. What time is it?",
+    options: ["3:15", "3:30", "3:45", "4:30"],
+    correctAnswer: 1
+  },
+  {
+    id: 253,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] Jacob has 3 boxes of crayons with 8 crayons in each box. He loses 5 crayons. How many crayons does he have now?",
+    options: ["19 crayons", "21 crayons", "24 crayons", "29 crayons"],
+    correctAnswer: 0
+  },
+  {
+    id: 254,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] Which real-world problem is best represented by the equation 4 × 3 = 12?",
+    options: ["Sharing 12 apples equally among 4 friends gives 3 each", "4 birds sitting on a fence and 3 fly away", "Adding 4 apples and 3 oranges gives 12 fruits", "Taking 4 slices from 12 slices of pie"],
+    correctAnswer: 0
+  },
+  {
+    id: 255,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] Hannah reads 10 pages of her chapter book every day for 5 days. If the book has 75 pages in total, how many pages does she have left to read?",
+    options: ["15 pages", "20 pages", "25 pages", "35 pages"],
+    correctAnswer: 2
+  },
+  {
+    id: 256,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] While walking near a freshwater pond, Maya notices frogs, lily pads, and dragonflies interacting. What scientific term describes this living community and its physical environment?",
+    options: ["Food web", "Ecosystem", "Organism", "Habitat only"],
+    correctAnswer: 1
+  },
+  {
+    id: 257,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] If a severe drought causes plants in a meadow ecosystem to dry up and die, what will most likely happen to the rabbit population that feeds on those plants?",
+    options: ["The rabbit population will increase", "The rabbit population will decrease due to lack of food", "Rabbits will start eating rocks", "Rabbits will turn into producers"],
+    correctAnswer: 1
+  },
+  {
+    id: 258,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] A student leaves a shallow bowl of water in the sunny backyard. Two days later, the bowl is completely empty. What phase change occurred?",
+    options: ["Freezing", "Condensation", "Evaporation", "Melting"],
+    correctAnswer: 2
+  },
+  {
+    id: 259,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] During a science project, Liam places a potted seedling next to a window. Over two weeks, the plant stems bend towards the glass. Why does the plant grow in this direction?",
+    options: ["To find fresh air", "To capture sunlight needed for making food through photosynthesis", "To stay warm from the glass", "To escape soil insects"],
+    correctAnswer: 1
+  },
+  {
+    id: 260,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Which organism in a forest ecosystem acts as a decomposer by breaking down fallen leaves and dead trees?",
+    options: ["Red fox", "Wild mushroom (fungus)", "Oak tree", "White-tailed deer"],
+    correctAnswer: 1
+  },
+  {
+    id: 261,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] An engineer needs a material that maintains a fixed shape and volume under heavy weight. Which state of matter must she select?",
+    options: ["Gas", "Liquid", "Solid", "Plasma"],
+    correctAnswer: 2
+  },
+  {
+    id: 262,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Scientists observe a polar bear's thick layer of blubber and dense white fur. How do these traits help the bear survive in its Arctic environment?",
+    options: ["They help the bear stay cool in summer", "They provide thermal insulation against extreme cold and camouflage on snow", "They help the bear swim faster than fish", "They attract other animals for shelter"],
+    correctAnswer: 1
+  },
+  {
+    id: 263,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] A glass of iced water gets wet on the outside surface on a warm afternoon. What scientific process caused these water droplets to form?",
+    options: ["Water leaked through the glass", "Water vapor in the air cooled down and condensed on the cold outer glass surface", "Ice melted through the container wall", "Direct evaporation"],
+    correctAnswer: 1
+  },
+  {
+    id: 264,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] If all green algae (producers) in a small pond ecosystem were eliminated, how would herbivorous pond fish be affected?",
+    options: ["They would grow larger", "They would starve or have to migrate because their food source disappeared", "They would start producing their own food", "No impact would occur"],
+    correctAnswer: 1
+  },
+  {
+    id: 265,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] A student measures steam rising from a boiling kettle. Steam represents water in which state of matter?",
+    options: ["Solid", "Liquid", "Gas", "Plasma"],
+    correctAnswer: 2
+  },
+  {
+    id: 266,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] A desert lizard seeks shade under a boulder during the hottest afternoon hours. What type of adaptation is the lizard showing?",
+    options: ["Physical adaptation", "Behavioral adaptation", "Structural adaptation", "Chemical adaptation"],
+    correctAnswer: 1
+  },
+  {
+    id: 267,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Which organism serves as a primary producer in an ocean marine food web?",
+    options: ["Great white shark", "Sea turtle", "Microscopic phytoplankton (algae)", "Jellyfish"],
+    correctAnswer: 2
+  },
+  {
+    id: 268,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] When an ice cube melts on a warm kitchen counter, it transforms from a solid to a liquid. What energy change triggered this?",
+    options: ["Thermal energy (heat) was absorbed by the ice", "Thermal energy was removed from the ice", "Air pressure pressed the ice down", "Light energy was blocked"],
+    correctAnswer: 0
+  },
+  {
+    id: 269,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Why do earthworms crawl up onto sidewalks after a heavy rainstorm?",
+    options: ["They need direct sunlight to produce sugar", "Rainwater fills their underground soil tunnels, forcing them to find oxygen above ground", "They drink falling raindrops", "They are escaping underground noise"],
+    correctAnswer: 1
+  },
+  {
+    id: 270,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] A gardener notices that soil containing earthworms yields healthier plants than sterile soil. Why?",
+    options: ["Earthworms eat garden leaves", "Earthworms decompose organic material and aerate the soil for root growth", "Earthworms generate underground sunlight", "Earthworms block water from reaching roots"],
+    correctAnswer: 1
+  },
+  {
+    id: 271,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Traffic near a local elementary school becomes dangerous during morning drop-off. Which level of government has primary responsibility to install a traffic signal?",
+    options: ["Federal government (President)", "Local municipal government (City Council & Mayor)", "State government of another state", "United States Supreme Court"],
+    correctAnswer: 1
+  },
+  {
+    id: 272,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Citizens in a town attend a public meeting to vote on whether to construct a community park. This is an example of:",
+    options: ["Monarchy", "Democratic participation and civic duty", "Military rule", "Taxation without representation"],
+    correctAnswer: 1
+  },
+  {
+    id: 273,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Looking at the official American flag, a student counts 50 white stars. What do these 50 stars represent in U.S. history?",
+    options: ["The 50 signers of the Declaration of Independence", "The 50 current states of the United States", "The 50 original colonies", "The 50 U.S. Presidents"],
+    correctAnswer: 1
+  },
+  {
+    id: 274,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] A traveler uses a physical map to navigate across California. Which map symbol should she look at to find directions (North, South, East, West)?",
+    options: ["Map scale bar", "Compass rose", "Map legend", "Latitude line"],
+    correctAnswer: 1
+  },
+  {
+    id: 275,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Why was the Bald Eagle chosen as a national symbol of the United States in 1782?",
+    options: ["It symbolizes supreme freedom, strength, and independence", "It is the only bird in North America", "It was selected by the King of England", "It lives in every U.S. city"],
+    correctAnswer: 0
+  },
+  {
+    id: 276,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] If a storm damages power lines in a neighborhood, which emergency response team works alongside utility crews to keep residents safe?",
+    options: ["City librarians", "Local public safety emergency services", "School board members", "Park rangers"],
+    correctAnswer: 1
+  },
+  {
+    id: 277,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] California shares its western coastline with which major ocean?",
+    options: ["Atlantic Ocean", "Gulf of Mexico", "Pacific Ocean", "Indian Ocean"],
+    correctAnswer: 2
+  },
+  {
+    id: 278,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Why do residents pay local taxes to their city or county government?",
+    options: ["To buy private cars for city officials", "To fund essential public services like fire departments, public parks, roads, and schools", "To host private parties", "To send money overseas"],
+    correctAnswer: 1
+  },
+  {
+    id: 279,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] A student reads an original handwritten letter written by a California settler in 1849. This document is classified as a:",
+    options: ["Primary source", "Secondary source", "Fictional story", "Modern summary"],
+    correctAnswer: 0
+  },
+  {
+    id: 280,
+    grade: "3rd",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] What is the chief role of a municipal court judge?",
+    options: ["To write new state laws", "To evaluate evidence and apply laws fairly to resolve disputes", "To collect taxes from citizens", "To command the military"],
+    correctAnswer: 1
+  }
+];
+
+// ─── 5TH GRADE — SCENARIO-BASED & APPLICATION (40 questions) ────────────────────
+const grade5Scenario = [
+  {
+    id: 281,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A solar energy grid produces 10³ kilowatt-hours of clean electricity per day. How many total kilowatt-hours does this represent in standard form?",
+    options: ["100 kWh", "300 kWh", "1,000 kWh", "10,000 kWh"],
+    correctAnswer: 2
+  },
+  {
+    id: 282,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A microscopic biological sample measures 5 × 10⁻³ meters long. Express this measurement in decimal notation.",
+    options: ["0.05 meters", "0.005 meters", "0.0005 meters", "0.5 meters"],
+    correctAnswer: 1
+  },
+  {
+    id: 283,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A chef uses 2 1/2 cups of flour per batch of pastry. If he prepares 3 1/2 batches for a catered event, how many cups of flour does he need?",
+    options: ["6 cups", "7 1/2 cups", "8 3/4 cups", "9 cups"],
+    correctAnswer: 2
+  },
+  {
+    id: 284,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A logistics manager uses the algebraic equation 4x − 12 = 36 to determine the number of cargo containers (x) loaded. What is x?",
+    options: ["8", "10", "12", "14"],
+    correctAnswer: 2
+  },
+  {
+    id: 285,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A rectangular water reservoir measures 8 meters long, 5 meters wide, and 3 meters deep. What is its volume in cubic meters?",
+    options: ["39 cubic meters", "90 cubic meters", "120 cubic meters", "150 cubic meters"],
+    correctAnswer: 2
+  },
+  {
+    id: 286,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] An electric charging station supplies 12.5 kilowatt-hours (kWh) per hour. How much energy is delivered in 4.5 hours?",
+    options: ["50 kWh", "56.25 kWh", "60 kWh", "62.5 kWh"],
+    correctAnswer: 1
+  },
+  {
+    id: 287,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A data compression algorithm reduces a file size by a factor of 10² (100). If the original size was 4,500 MB, what is the compressed size?",
+    options: ["45 MB", "450 MB", "4.5 MB", "0.45 MB"],
+    correctAnswer: 0
+  },
+  {
+    id: 288,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A marathon trainee logs daily runs: 3 1/4 miles, 4 1/2 miles, 2 3/4 miles, and 5 miles. What is her total distance?",
+    options: ["14 miles", "15 1/2 miles", "15 1/4 miles", "16 miles"],
+    correctAnswer: 1
+  },
+  {
+    id: 289,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A school fundraiser sells 85 tickets for $6 each and spends $50 on supplies. Which expression calculates net profit?",
+    options: ["(85 × 6) + 50", "(85 × 6) − 50", "(85 + 6) − 50", "(85 ÷ 6) − 50"],
+    correctAnswer: 1
+  },
+  {
+    id: 290,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A laboratory technician evaluates the formula 2⁴ × 3 to find a chemical dose in milliliters. What is the result?",
+    options: ["24 mL", "36 mL", "48 mL", "96 mL"],
+    correctAnswer: 2
+  },
+  {
+    id: 291,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] On a regional map, 1 inch represents 25 miles. If two historic landmarks are 3.5 inches apart on the map, what is the actual distance?",
+    options: ["75 miles", "82.5 miles", "87.5 miles", "100 miles"],
+    correctAnswer: 2
+  },
+  {
+    id: 292,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] Solving the equation 3(x + 4) = 27 for x gives a temperature change in degrees. What is x?",
+    options: ["x = 5", "x = 6", "x = 7", "x = 9"],
+    correctAnswer: 0
+  },
+  {
+    id: 293,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A shipping crate contains 1,000 small parcels weighing 0.45 kg each. What is the total mass of the parcels combined?",
+    options: ["4.5 kg", "45 kg", "450 kg", "4,500 kg"],
+    correctAnswer: 2
+  },
+  {
+    id: 294,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] At an athletic complex, 3/8 of athletes participate in soccer, 1/4 in basketball, and the rest in track. What fraction participate in track?",
+    options: ["1/8", "3/8", "1/2", "5/8"],
+    correctAnswer: 1
+  },
+  {
+    id: 295,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Math Scenario] A wall measures 15 feet long by 10 feet high. If one can of paint covers 100 square feet, how many cans are required to paint the wall?",
+    options: ["1 can", "1.5 cans", "2 cans", "2.5 cans"],
+    correctAnswer: 1
+  },
+  {
+    id: 296,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Under a light microscope, a plant cell displays a rigid outer boundary surrounding the plasma membrane. What structure is this?",
+    options: ["Cell membrane", "Cell wall", "Mitochondria", "Cytoplasm"],
+    correctAnswer: 1
+  },
+  {
+    id: 297,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Muscle cells require large amounts of ATP energy during high-intensity exercise. Which organelle is highly concentrated in muscle tissue?",
+    options: ["Nucleus", "Ribosome", "Mitochondria", "Vacuole"],
+    correctAnswer: 2
+  },
+  {
+    id: 298,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] A greenhouse plant uses carbon dioxide, water, and sunlight to synthesize sugar and release oxygen. What is this chemical process?",
+    options: ["Cellular respiration", "Photosynthesis", "Fermentation", "Transpiration only"],
+    correctAnswer: 1
+  },
+  {
+    id: 299,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] When comparing an Elodea leaf cell to a human skin cell, which organelle is present in the leaf cell but absent in the skin cell?",
+    options: ["Nucleus", "Mitochondria", "Chloroplast", "Cell membrane"],
+    correctAnswer: 2
+  },
+  {
+    id: 300,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Placing a potato slice into concentrated saltwater causes water to move out of the cells, making the potato limp. What process occurred?",
+    options: ["Active transport", "Osmosis", "Photosynthesis", "Cellular division"],
+    correctAnswer: 1
+  },
+  {
+    id: 301,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] If the nucleus is removed from a living cell, what is the immediate biological consequence?",
+    options: ["Cell reproduces faster", "The cell loses its genetic master plan and metabolic control", "The cell produces chlorophyll", "The cell wall thickens"],
+    correctAnswer: 1
+  },
+  {
+    id: 302,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Which biological hierarchy correctly arranges levels of organization from simplest to most complex?",
+    options: ["Organism → Organ → Tissue → Cell", "Cell → Tissue → Organ → Organ System → Organism", "Tissue → Cell → Organism → Organ", "Organ → Cell → Organ System → Tissue"],
+    correctAnswer: 1
+  },
+  {
+    id: 303,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Testing a sunlit leaf with iodine turns the leaf dark blue-black. What stored carbohydrate does this confirm?",
+    options: ["Starch produced from excess glucose during photosynthesis", "Protein reserves", "Lipids", "Pure nitrogen"],
+    correctAnswer: 0
+  },
+  {
+    id: 304,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Red blood cells carry oxygen throughout the bloodstream. Which iron-rich protein binds to oxygen molecules?",
+    options: ["Chlorophyll", "Hemoglobin", "Insulin", "Collagen"],
+    correctAnswer: 1
+  },
+  {
+    id: 305,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] A microscopic single-celled bacterium lacks a membrane-bound nucleus. How is this organism classified?",
+    options: ["Eukaryote", "Prokaryote", "Fungus", "Plant cell"],
+    correctAnswer: 1
+  },
+  {
+    id: 306,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Plant cells possess a prominent central vacuole, while animal cells have small vacuoles. What primary function does the central vacuole serve?",
+    options: ["Storing water and building turgor pressure to keep stems rigid", "Digesting prey", "Generating electrical impulses", "Performing photosynthesis"],
+    correctAnswer: 0
+  },
+  {
+    id: 307,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] During sprinting, a runner's breathing rate accelerates rapidly. Why does the respiratory system demand more oxygen?",
+    options: ["To cool down skin", "To supply oxygen for cellular respiration in mitochondria to yield energy", "To filter blood water", "To contract skeletal bones"],
+    correctAnswer: 1
+  },
+  {
+    id: 308,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] In an ecosystem energy pyramid, primary producers generate 10,000 Joules of energy. Applying the 10% transfer rule, how much energy reaches primary consumers?",
+    options: ["10,000 Joules", "1,000 Joules", "100 Joules", "10 Joules"],
+    correctAnswer: 1
+  },
+  {
+    id: 309,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] Which organelle is referred to as the command center of a eukaryotic cell because it stores genetic chromosomes?",
+    options: ["Ribosome", "Golgi apparatus", "Nucleus", "Endoplasmic reticulum"],
+    correctAnswer: 2
+  },
+  {
+    id: 310,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[Science Scenario] How do agricultural crops absorb essential dissolved soil minerals like nitrates?",
+    options: ["Through leaf stomata", "Through specialized root hair cell membranes", "Through flower petals", "By stem bark"],
+    correctAnswer: 1
+  },
+  {
+    id: 311,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] In July 1776, the Continental Congress adopted the Declaration of Independence. What was the central objective of this historic document?",
+    options: ["To negotiate trade with Spain", "To formally sever political ties with Great Britain and form a sovereign nation", "To draft national tax codes", "To establish a royal monarchy"],
+    correctAnswer: 1
+  },
+  {
+    id: 312,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Delegates at the 1787 Constitutional Convention divided federal government into Legislative, Executive, and Judicial branches. Why?",
+    options: ["To maximize presidential authority", "To establish checks and balances preventing tyranny by any single branch", "To eliminate state court systems", "To speed up taxation"],
+    correctAnswer: 1
+  },
+  {
+    id: 313,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Issued by President Lincoln on Jan 1, 1863, what was the primary legal mandate of the Emancipation Proclamation?",
+    options: ["Ending the Civil War instantly", "Declaring all enslaved people in Confederate states in rebellion to be free", "Granting women voting rights", "Creating the U.S. Navy"],
+    correctAnswer: 1
+  },
+  {
+    id: 314,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] A newspaper journalist publishes an article criticizing a proposed federal law. Which constitutional protection safeguards her writing?",
+    options: ["1st Amendment (Freedom of Speech and Press)", "2nd Amendment", "5th Amendment", "10th Amendment"],
+    correctAnswer: 0
+  },
+  {
+    id: 315,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] What fundamental economic difference separated Northern Union states from Southern Confederate states prior to the Civil War?",
+    options: ["The North relied on industrial manufacturing and free labor; the South depended on agricultural exports and enslaved labor", "The North grew cotton; the South manufactured steel engines", "The South possessed more railway infrastructure than the North", "Both economies relied strictly on fur trapping"],
+    correctAnswer: 0
+  },
+  {
+    id: 316,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Congress passes a law, the President vetoes it, and Congress subsequently overrides the veto with a two-thirds majority vote. This process illustrates:",
+    options: ["Unlawful federal action", "Constitutional checks and balances in action", "Judicial review", "Executive supremacy"],
+    correctAnswer: 1
+  },
+  {
+    id: 317,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Which post-Civil War era focused on readmitting Southern states and constitutional amendments protecting rights of formerly enslaved individuals?",
+    options: ["The Revolutionary War", "The Reconstruction Era", "The Great Depression", "The Progressive Era"],
+    correctAnswer: 1
+  },
+  {
+    id: 318,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Why did American leaders replace the Articles of Confederation with the U.S. Constitution in 1787?",
+    options: ["The Articles created a weak central government unable to levy taxes or regulate commerce", "The Articles gave total power to a British king", "The Articles abolished state governments", "The Articles lacked a judicial system only"],
+    correctAnswer: 0
+  },
+  {
+    id: 319,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] Which prominent abolitionist escaped slavery, became a brilliant orator, and authored 'Narrative of the Life of Frederick Douglass'?",
+    options: ["Jefferson Davis", "Frederick Douglass", "Ulysses S. Grant", "Alexander Hamilton"],
+    correctAnswer: 1
+  },
+  {
+    id: 320,
+    grade: "5th",
+    subject: "Scenario-Based",
+    questionText: "[History Scenario] What is the principal constitutional responsibility of the U.S. Supreme Court and Judicial Branch?",
+    options: ["Passing new tax laws", "Interpreting laws and evaluating their constitutionality", "Commanding military forces", "Printing currency"],
+    correctAnswer: 1
+  }
+];
+
+
+/** Complete flat list of all 320 curriculum-aligned questions */
 export const questions = [
   ...grade3Math,
   ...grade3Science,
   ...grade3History,
+  ...grade3Scenario,
   ...grade5Math,
   ...grade5Science,
   ...grade5History,
+  ...grade5Scenario,
 ];
 
 /**

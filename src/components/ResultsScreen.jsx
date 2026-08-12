@@ -16,7 +16,7 @@ const OPTION_LABELS = ['A', 'B', 'C', 'D']
  *   userAnswers    {array}   – list of { question, selectedAnswer, isCorrect }
  *   onRestart      {function} – resets the quiz
  */
-export default function ResultsScreen({ score, totalQuestions, userAnswers = [], onRestart }) {
+export default function ResultsScreen({ score, totalQuestions, userAnswers = [], onRestart, dbSyncStatus, dbError }) {
   const percentage  = Math.round((score / totalQuestions) * 100)
   const dashOffset  = CIRCUMFERENCE - (percentage / 100) * CIRCUMFERENCE
   const [showReview, setShowReview] = useState(false)
@@ -58,10 +58,54 @@ export default function ResultsScreen({ score, totalQuestions, userAnswers = [],
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.25 }}
-            style={{ color: 'var(--color-text-2)', fontSize: '0.95rem', marginBottom: '2rem' }}
+            style={{ color: 'var(--color-text-2)', fontSize: '0.95rem', marginBottom: '1.25rem' }}
           >
             Here's how you performed across all subjects.
           </motion.p>
+
+          {dbSyncStatus && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                padding: '0.35rem 0.8rem',
+                borderRadius: '20px',
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                marginBottom: '1.5rem',
+                background: dbSyncStatus === 'saving'
+                  ? 'rgba(110, 142, 251, 0.1)'
+                  : dbSyncStatus === 'saved'
+                    ? 'rgba(46, 160, 67, 0.1)'
+                    : 'rgba(240, 136, 62, 0.1)',
+                border: `1px solid ${
+                  dbSyncStatus === 'saving'
+                    ? 'rgba(110, 142, 251, 0.3)'
+                    : dbSyncStatus === 'saved'
+                      ? 'rgba(46, 160, 67, 0.3)'
+                      : 'rgba(240, 136, 62, 0.3)'
+                }`,
+                color: dbSyncStatus === 'saving'
+                  ? 'var(--color-primary)'
+                  : dbSyncStatus === 'saved'
+                    ? 'var(--color-correct)'
+                    : '#f0883e'
+              }}
+            >
+              {dbSyncStatus === 'saving' && (
+                <>⏳ Syncing results to database...</>
+              )}
+              {dbSyncStatus === 'saved' && (
+                <>☁️ Synchronized to Database</>
+              )}
+              {dbSyncStatus === 'error' && (
+                <>💾 Saved locally (Offline mode: {dbError})</>
+              )}
+            </motion.div>
+          )}
 
           {/* ── Score ring ── */}
           <motion.div
@@ -187,10 +231,11 @@ export default function ResultsScreen({ score, totalQuestions, userAnswers = [],
 
               {userAnswers.map(({ question, selectedAnswer, isCorrect }, idx) => {
                 const badgeClass = {
-                  Math:    'badge-math',
-                  Science: 'badge-science',
-                  History: 'badge-history',
-                }[question.subject] ?? 'badge-math'
+                  Math:            'badge-math',
+                  Science:         'badge-science',
+                  History:         'badge-history',
+                  'Scenario-Based':'badge-scenario',
+                }[question.subject] ?? 'badge-scenario'
 
                 return (
                   <div

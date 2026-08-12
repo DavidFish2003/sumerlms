@@ -26,10 +26,11 @@ export default function QuizCard({
   }
 
   const badgeClass = {
-    Math:    'badge-math',
-    Science: 'badge-science',
-    History: 'badge-history',
-  }[question.subject] ?? 'badge-math'
+    Math:            'badge-math',
+    Science:         'badge-science',
+    History:         'badge-history',
+    'Scenario-Based':'badge-scenario',
+  }[question.subject] ?? 'badge-scenario'
 
   return (
     <AnimatePresence mode="wait">

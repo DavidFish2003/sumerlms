@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { getStudentHistory } from '../services/firebase'
 
 const TIMER_PRESETS = [
   { label: '15 min', value: 15 },
@@ -8,6 +9,21 @@ const TIMER_PRESETS = [
   { label: '60 min', value: 60 },
 ]
 
+const CURRICULUM_DETAILS = {
+  '3rd': {
+    Math:            ['Fractions & representations', 'Equivalent fractions', 'Word problems with fractions', 'Simple equations (x + 3 = 7)'],
+    Science:         ['Terrestrial & aquatic habitats', 'Producers, consumers & decomposers', 'Ecosystems & food chains', 'Three states of matter'],
+    History:         ['Community helpers & roles', 'American flag, Bald Eagle, Liberty Bell', 'US states, boundaries & coasts', 'Geographic landmarks'],
+    'Scenario-Based':['15 Applied Math Word Problems', '15 Real-World Science Scenarios', '10 Primary Source & Civics Decisions'],
+  },
+  '5th': {
+    Math:            ['Exponents (2³ = 8)', 'Negative exponents & calculations', 'Multi-step algebraic equations', 'Operations with mixed fractions'],
+    Science:         ['The cell as the basic unit of life', 'Plant vs. animal cell structures', 'Cell organelles (nucleus, mitochondria, chloroplasts)', 'Characteristics of living things'],
+    History:         ['Declaration of Independence (1776)', 'Causes and events of the Civil War', 'Emancipation Proclamation & Lincoln', 'US Constitution & Bill of Rights'],
+    'Scenario-Based':['15 Complex Math & Energy Equations', '15 Laboratory & Biological Case Studies', '10 Historical Document & Constitutional Scenarios'],
+  },
+}
+
 export default function WelcomeScreen({ onStartExam }) {
   const [studentName,    setStudentName]    = useState('')
   const [selectedGrade,  setSelectedGrade]  = useState('')
@@ -15,10 +31,38 @@ export default function WelcomeScreen({ onStartExam }) {
   const [timerMinutes,   setTimerMinutes]   = useState(30)
   const [customTimer,    setCustomTimer]    = useState('')
   const [useCustom,      setUseCustom]      = useState(false)
+  const [history,        setHistory]        = useState([])
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false)
 
-  const effectiveTimer = useCustom
-    ? Math.max(1, Math.min(180, parseInt(customTimer) || 30))
-    : timerMinutes
+  // Debounced search for student history when studentName changes
+  useEffect(() => {
+    if (!studentName.trim()) {
+      setHistory([])
+      return
+    }
+
+    setIsLoadingHistory(true)
+    const timer = setTimeout(() => {
+      getStudentHistory(studentName)
+        .then((res) => {
+          setHistory(res || [])
+        })
+        .catch((err) => {
+          console.error('Error loading student history:', err)
+        })
+        .finally(() => {
+          setIsLoadingHistory(false)
+        })
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [studentName])
+
+  const effectiveTimer = selectedSubject === 'Scenario-Based'
+    ? 60
+    : (useCustom
+        ? Math.max(1, Math.min(180, parseInt(customTimer) || 30))
+        : timerMinutes)
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -29,20 +73,6 @@ export default function WelcomeScreen({ onStartExam }) {
       subject: selectedSubject,
       timerMinutes: effectiveTimer,
     })
-  }
-
-  // Curriculum topics metadata
-  const curriculumDetails = {
-    '3rd': {
-      Math:    ['Fractions & representations', 'Equivalent fractions', 'Word problems with fractions', 'Simple equations (x + 3 = 7)'],
-      Science: ['Terrestrial & aquatic habitats', 'Producers, consumers & decomposers', 'Ecosystems & food chains', 'Three states of matter'],
-      History: ['Community helpers & roles', 'American flag, Bald Eagle, Liberty Bell', 'US states, boundaries & coasts', 'Geographic landmarks'],
-    },
-    '5th': {
-      Math:    ['Exponents (2³ = 8)', 'Negative exponents & calculations', 'Multi-step algebraic equations', 'Operations with mixed fractions'],
-      Science: ['The cell as the basic unit of life', 'Plant vs. animal cell structures', 'Cell organelles (nucleus, mitochondria, chloroplasts)', 'Characteristics of living things'],
-      History: ['Declaration of Independence (1776)', 'Causes and events of the Civil War', 'Emancipation Proclamation & Lincoln', 'US Constitution & Bill of Rights'],
-    },
   }
 
   const inputStyle = {
@@ -90,10 +120,10 @@ export default function WelcomeScreen({ onStartExam }) {
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
           marginBottom: '0.5rem',
         }}>
-          SummerLMS Portal
+          OmisoreTestLab
         </h1>
         <p style={{ color: 'var(--color-text-2)', fontSize: '0.95rem' }}>
-          Welcome to the Bakersfield K-12 Interactive Examination Center.
+          A Private Testing Platform for kids.
         </p>
       </div>
 
@@ -113,6 +143,87 @@ export default function WelcomeScreen({ onStartExam }) {
             onBlur={(e)  => e.target.style.borderColor = 'var(--color-border)'}
           />
         </div>
+
+        {/* ── Student History (Interactive Search results) ── */}
+        <AnimatePresence>
+          {(isLoadingHistory || history.length > 0) && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div style={{
+                padding: '1.25rem',
+                borderRadius: '12px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1.5px dashed var(--color-border)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-2)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                    📊 Past Exam Performance ({history.length})
+                  </span>
+                  {isLoadingHistory && (
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-primary)' }}>
+                      ⏳ Loading...
+                    </span>
+                  )}
+                </div>
+
+                {!isLoadingHistory && history.length > 0 && (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '180px', overflowY: 'auto', paddingRight: '4px' }}>
+                    {history.map((attempt, index) => {
+                      const dateStr = attempt.completedAt 
+                        ? new Date(attempt.completedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+                        : 'Unknown Date'
+                      const isOutstanding = attempt.percentage >= 90
+                      const isPassing = attempt.percentage >= 70
+                      const scoreColor = isOutstanding ? '#e3b341' : isPassing ? 'var(--color-correct)' : 'var(--color-wrong)'
+
+                      return (
+                        <div
+                          key={attempt.id || index}
+                          style={{
+                            padding: '0.6rem 0.8rem',
+                            borderRadius: '8px',
+                            background: 'rgba(255, 255, 255, 0.02)',
+                            border: '1px solid var(--color-border)',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            fontSize: '0.8rem',
+                          }}
+                        >
+                          <div>
+                            <div style={{ fontWeight: 700, color: 'var(--color-text-1)', display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                              <span>{attempt.subject === 'All' ? '📚 All' : attempt.subject}</span>
+                              <span style={{ fontSize: '0.7rem', opacity: 0.6 }}>· Grade {attempt.grade}</span>
+                            </div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-3)', marginTop: '0.2rem' }}>
+                              {dateStr}
+                            </div>
+                          </div>
+                          <div style={{ textAlign: 'right' }}>
+                            <div style={{ fontWeight: 800, color: scoreColor, fontSize: '0.95rem' }}>
+                              {attempt.score}/{attempt.totalQuestions}
+                            </div>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--color-text-3)' }}>
+                              ({attempt.percentage}%)
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ── Grade Selector ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -153,23 +264,23 @@ export default function WelcomeScreen({ onStartExam }) {
               {/* Subject picker */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                 <label style={labelStyle}>Select Subject / Topic Focus</label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
-                  {['All', 'Math', 'Science', 'History'].map((sub) => (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: '0.5rem' }}>
+                  {['All', 'Math', 'Science', 'History', 'Scenario-Based'].map((sub) => (
                     <button
                       key={sub}
                       type="button"
                       onClick={() => setSelectedSubject(sub)}
                       style={{
-                        padding: '0.75rem 0.5rem',
+                        padding: '0.75rem 0.4rem',
                         borderRadius: '10px',
                         border: selectedSubject === sub ? '2px solid var(--color-primary)' : '1.5px solid var(--color-border)',
                         background: selectedSubject === sub ? 'rgba(110, 142, 251, 0.15)' : 'rgba(22, 27, 34, 0.4)',
                         color: selectedSubject === sub ? '#fff' : 'var(--color-text-2)',
-                        fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer',
+                        fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
                         transition: 'all 0.2s ease',
                       }}
                     >
-                      {sub === 'All' ? '📚 All' : sub === 'Math' ? '📐 Math' : sub === 'Science' ? '🔬 Science' : '🏛️ History'}
+                      {sub === 'All' ? '📚 All' : sub === 'Math' ? '📐 Math' : sub === 'Science' ? '🔬 Science' : sub === 'History' ? '🏛️ History' : '💡 Scenario'}
                     </button>
                   ))}
                 </div>
@@ -187,16 +298,21 @@ export default function WelcomeScreen({ onStartExam }) {
                         30 Math · 30 Science · 10 History = 70 total
                       </span>
                     )}
+                    {selectedSubject === 'Scenario-Based' && (
+                      <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', color: '#f0883e', fontWeight: 600 }}>
+                        15 Math · 15 Science · 10 History = 40 Scenarios (60 Min)
+                      </span>
+                    )}
                   </p>
                   <ul style={{ paddingLeft: '1.2rem', color: 'var(--color-text-2)', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
                     {selectedSubject === 'All' ? (
                       <>
-                        <li><strong>Math:</strong> {curriculumDetails[selectedGrade].Math[0]} & more</li>
-                        <li><strong>Science:</strong> {curriculumDetails[selectedGrade].Science[0]} & more</li>
-                        <li><strong>History:</strong> {curriculumDetails[selectedGrade].History[0]} & more</li>
+                        <li><strong>Math:</strong> {CURRICULUM_DETAILS[selectedGrade]?.Math?.[0]} & more</li>
+                        <li><strong>Science:</strong> {CURRICULUM_DETAILS[selectedGrade]?.Science?.[0]} & more</li>
+                        <li><strong>History:</strong> {CURRICULUM_DETAILS[selectedGrade]?.History?.[0]} & more</li>
                       </>
                     ) : (
-                      curriculumDetails[selectedGrade][selectedSubject].map((item, idx) => (
+                      CURRICULUM_DETAILS[selectedGrade]?.[selectedSubject]?.map((item, idx) => (
                         <li key={idx}>{item}</li>
                       ))
                     )}
@@ -208,92 +324,115 @@ export default function WelcomeScreen({ onStartExam }) {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 <label style={labelStyle}>⏱ Countdown Timer Duration</label>
 
-                {/* Preset buttons */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
-                  {TIMER_PRESETS.map(({ label, value }) => (
-                    <button
-                      key={value}
-                      type="button"
-                      onClick={() => { setTimerMinutes(value); setUseCustom(false) }}
-                      style={{
-                        padding: '0.75rem 0.5rem',
-                        borderRadius: '10px',
-                        border: (!useCustom && timerMinutes === value) ? '2px solid #f0883e' : '1.5px solid var(--color-border)',
-                        background: (!useCustom && timerMinutes === value) ? 'rgba(240,136,62,0.15)' : 'rgba(22,27,34,0.4)',
-                        color: (!useCustom && timerMinutes === value) ? '#fff' : 'var(--color-text-2)',
-                        fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
+                {selectedSubject === 'Scenario-Based' ? (
+                  <div style={{
+                    padding: '1rem 1.25rem',
+                    borderRadius: '12px',
+                    background: 'rgba(240, 136, 62, 0.12)',
+                    border: '1.5px solid rgba(240, 136, 62, 0.35)',
+                    color: '#f0883e',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                  }}>
+                    <span style={{ fontSize: '1.8rem' }}>⏱️</span>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>Fixed 60-Minute Exam Timer</div>
+                      <div style={{ fontSize: '0.8rem', opacity: 0.85, marginTop: '0.15rem' }}>
+                        This scenario-based category consists of 40 applied questions with a locked 60-minute countdown timer.
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {/* Preset buttons */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
+                      {TIMER_PRESETS.map(({ label, value }) => (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() => { setTimerMinutes(value); setUseCustom(false) }}
+                          style={{
+                            padding: '0.75rem 0.5rem',
+                            borderRadius: '10px',
+                            border: (!useCustom && timerMinutes === value) ? '2px solid #f0883e' : '1.5px solid var(--color-border)',
+                            background: (!useCustom && timerMinutes === value) ? 'rgba(240,136,62,0.15)' : 'rgba(22,27,34,0.4)',
+                            color: (!useCustom && timerMinutes === value) ? '#fff' : 'var(--color-text-2)',
+                            fontWeight: 700, fontSize: '0.875rem', cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                          }}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
 
-                {/* Custom input row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <button
-                    type="button"
-                    onClick={() => setUseCustom(prev => !prev)}
-                    style={{
-                      flexShrink: 0,
-                      padding: '0.5rem 1rem',
-                      borderRadius: '8px',
-                      border: useCustom ? '2px solid #f0883e' : '1.5px solid var(--color-border)',
-                      background: useCustom ? 'rgba(240,136,62,0.15)' : 'rgba(22,27,34,0.4)',
-                      color: useCustom ? '#fff' : 'var(--color-text-2)',
-                      fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    ✏️ Custom
-                  </button>
-                  <AnimatePresence>
-                    {useCustom && (
-                      <motion.div
-                        initial={{ opacity: 0, width: 0 }}
-                        animate={{ opacity: 1, width: 'auto' }}
-                        exit={{ opacity: 0, width: 0 }}
-                        style={{ flex: 1, overflow: 'hidden' }}
+                    {/* Custom input row */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                      <button
+                        type="button"
+                        onClick={() => setUseCustom(prev => !prev)}
+                        style={{
+                          flexShrink: 0,
+                          padding: '0.5rem 1rem',
+                          borderRadius: '8px',
+                          border: useCustom ? '2px solid #f0883e' : '1.5px solid var(--color-border)',
+                          background: useCustom ? 'rgba(240,136,62,0.15)' : 'rgba(22,27,34,0.4)',
+                          color: useCustom ? '#fff' : 'var(--color-text-2)',
+                          fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          whiteSpace: 'nowrap',
+                        }}
                       >
-                        <input
-                          type="number"
-                          min="1"
-                          max="180"
-                          placeholder="Minutes (1–180)"
-                          value={customTimer}
-                          onChange={(e) => setCustomTimer(e.target.value)}
-                          style={{ ...inputStyle, padding: '0.75rem 1rem' }}
-                          onFocus={(e) => e.target.style.borderColor = '#f0883e'}
-                          onBlur={(e)  => e.target.style.borderColor = 'var(--color-border)'}
-                        />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  {!useCustom && (
-                    <span style={{ fontSize: '0.8rem', color: 'var(--color-text-3)' }}>
-                      or set a custom duration above
-                    </span>
-                  )}
-                </div>
+                        ✏️ Custom
+                      </button>
+                      <AnimatePresence>
+                        {useCustom && (
+                          <motion.div
+                            initial={{ opacity: 0, width: 0 }}
+                            animate={{ opacity: 1, width: 'auto' }}
+                            exit={{ opacity: 0, width: 0 }}
+                            style={{ flex: 1, overflow: 'hidden' }}
+                          >
+                            <input
+                              type="number"
+                              min="1"
+                              max="180"
+                              placeholder="Minutes (1–180)"
+                              value={customTimer}
+                              onChange={(e) => setCustomTimer(e.target.value)}
+                              style={{ ...inputStyle, padding: '0.75rem 1rem' }}
+                              onFocus={(e) => e.target.style.borderColor = '#f0883e'}
+                              onBlur={(e)  => e.target.style.borderColor = 'var(--color-border)'}
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                      {!useCustom && (
+                        <span style={{ fontSize: '0.8rem', color: 'var(--color-text-3)' }}>
+                          or set a custom duration above
+                        </span>
+                      )}
+                    </div>
 
-                {/* Timer preview */}
-                <div style={{
-                  padding: '0.75rem 1rem',
-                  borderRadius: '10px',
-                  background: 'rgba(240,136,62,0.08)',
-                  border: '1px solid rgba(240,136,62,0.25)',
-                  fontSize: '0.85rem',
-                  color: '#f0883e',
-                  fontWeight: 600,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                }}>
-                  ⏳ Timer will count down from <strong>{effectiveTimer} minute{effectiveTimer !== 1 ? 's' : ''}</strong>.
-                  Quiz auto-submits when time runs out.
-                </div>
+                    {/* Timer preview */}
+                    <div style={{
+                      padding: '0.75rem 1rem',
+                      borderRadius: '10px',
+                      background: 'rgba(240,136,62,0.08)',
+                      border: '1px solid rgba(240,136,62,0.25)',
+                      fontSize: '0.85rem',
+                      color: '#f0883e',
+                      fontWeight: 600,
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                    }}>
+                      ⏳ Timer will count down from <strong>{effectiveTimer} minute{effectiveTimer !== 1 ? 's' : ''}</strong>.
+                      Quiz auto-submits when time runs out.
+                    </div>
+                  </>
+                )}
               </div>
 
             </motion.div>
