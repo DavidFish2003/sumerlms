@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { getStudentHistory } from '../services/firebase'
+import AnalyticsDashboard from './AnalyticsDashboard'
 
 const TIMER_PRESETS = [
   { label: '15 min', value: 15 },
@@ -219,6 +220,11 @@ export default function WelcomeScreen({ onStartExam }) {
                       )
                     })}
                   </div>
+                )}
+
+                {/* ── Analytics & Trophy Dashboard ── */}
+                {!isLoadingHistory && history.length > 0 && (
+                  <AnalyticsDashboard history={history} studentName={studentName} />
                 )}
               </div>
             </motion.div>

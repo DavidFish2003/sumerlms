@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { evaluateBadges } from '../services/achievements'
 import ConfettiCanvas from './ConfettiCanvas'
 
 const RADIUS = 54
@@ -16,12 +17,20 @@ const OPTION_LABELS = ['A', 'B', 'C', 'D']
  *   userAnswers    {array}   – list of { question, selectedAnswer, isCorrect }
  *   onRestart      {function} – resets the quiz
  */
-export default function ResultsScreen({ score, totalQuestions, userAnswers = [], onRestart, dbSyncStatus, dbError }) {
+export default function ResultsScreen({ score, totalQuestions, userAnswers = [], onRestart, dbSyncStatus, dbError, history = [] }) {
   const percentage  = Math.round((score / totalQuestions) * 100)
   const dashOffset  = CIRCUMFERENCE - (percentage / 100) * CIRCUMFERENCE
   const [showReview, setShowReview] = useState(false)
+  const [newBadges, setNewBadges] = useState([])
 
   const { emoji, label, color } = getGrade(percentage)
+
+  // Evaluate badges for this exam result
+  useEffect(() => {
+    const currentResult = { percentage, subject: 'Mixed' }
+    const { newBadges } = evaluateBadges(currentResult, history)
+    setNewBadges(newBadges)
+  }, [percentage, history])
 
   return (
     <>
@@ -214,6 +223,25 @@ export default function ResultsScreen({ score, totalQuestions, userAnswers = [],
             )}
           </motion.div>
         </motion.div>
+
+        {/* New Badges earned */}
+        {newBadges.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7 }}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}
+          >
+            <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-text-1)' }}>New Badges Earned</span>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+              {newBadges.map(badge => (
+                <span key={badge.id} className="badge" style={{ background: badge.gradient, color: '#fff', padding: '0.25rem 0.5rem', borderRadius: '999px', fontSize: '0.85rem' }}>
+                  {badge.icon} {badge.title}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* ── Expandable Answer Review Section ── */}
         <AnimatePresence>
